@@ -1,0 +1,158 @@
+Language model created by QuickLM on Mon Mar 31 19:44:13 EDT 2014
+Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
+
+The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
+
+The code that was used to produce this language model is available in Open Source.
+Please visit http://www.speech.cs.cmu.edu/tools/ for more information
+
+The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
+This model based on a corpus of 33 sentences and 32 words
+
+\data\
+ngram 1=32
+ngram 2=63
+ngram 3=40
+
+\1-grams:
+-0.8078 </s> -0.3010
+-0.8078 <s> -0.2177
+-2.3263 CANCEL -0.2275
+-2.3263 CONTINUE -0.2275
+-2.3263 DECREASE -0.2275
+-2.3263 DOWN -0.2275
+-2.0253 E -0.2864
+-2.3263 EIGHT -0.2275
+-2.3263 ELEVEN -0.2275
+-2.3263 FIVE -0.2275
+-2.3263 FOUR -0.2275
+-2.3263 INCREASE -0.2275
+-2.3263 JOINT -0.2275
+-2.3263 LEFT -0.2275
+-2.3263 MOVE -0.2275
+-2.3263 NINE -0.2275
+-1.7243 ONE -0.2275
+-2.3263 PAPER -0.2275
+-2.3263 RIGHT -0.2275
+-2.3263 ROCK -0.2275
+-2.0253 S -0.2864
+-2.3263 SCISSORS -0.2275
+-2.3263 SEVEN -0.2275
+-2.3263 SIX -0.2275
+-2.3263 START -0.2275
+-2.3263 TEN -0.2275
+-2.3263 THREE -0.2275
+-2.3263 TWELVE -0.2275
+-2.0253 TWO -0.2275
+-2.3263 UP -0.2275
+-1.8492 W -0.2822
+-1.8492 ZERO -0.2275
+
+\2-grams:
+-1.8195 <s> CANCEL 0.0000
+-1.8195 <s> CONTINUE 0.0000
+-1.8195 <s> DECREASE 0.0000
+-1.8195 <s> DOWN 0.0000
+-1.5185 <s> E 0.0000
+-1.8195 <s> EIGHT 0.0000
+-1.8195 <s> ELEVEN 0.0000
+-1.8195 <s> FIVE 0.0000
+-1.8195 <s> FOUR 0.0000
+-1.8195 <s> INCREASE 0.0000
+-1.8195 <s> JOINT 0.0000
+-1.8195 <s> LEFT 0.0000
+-1.8195 <s> MOVE 0.0000
+-1.8195 <s> NINE 0.0000
+-1.8195 <s> ONE 0.0000
+-1.8195 <s> PAPER 0.0000
+-1.8195 <s> RIGHT 0.0000
+-1.8195 <s> ROCK 0.0000
+-1.5185 <s> S 0.0000
+-1.8195 <s> SCISSORS 0.0000
+-1.8195 <s> SEVEN 0.0000
+-1.8195 <s> SIX 0.0000
+-1.8195 <s> START 0.0000
+-1.8195 <s> TEN 0.0000
+-1.8195 <s> THREE 0.0000
+-1.8195 <s> TWELVE 0.0000
+-1.8195 <s> TWO 0.0000
+-1.8195 <s> UP 0.0000
+-1.3424 <s> W 0.0000
+-0.3010 CANCEL </s> -0.3010
+-0.3010 CONTINUE </s> -0.3010
+-0.3010 DECREASE </s> -0.3010
+-0.3010 DOWN </s> -0.3010
+-0.6021 E ONE 0.0000
+-0.6021 E ZERO 0.0000
+-0.3010 EIGHT </s> -0.3010
+-0.3010 ELEVEN </s> -0.3010
+-0.3010 FIVE </s> -0.3010
+-0.3010 FOUR </s> -0.3010
+-0.3010 INCREASE </s> -0.3010
+-0.3010 JOINT </s> -0.3010
+-0.3010 LEFT </s> -0.3010
+-0.3010 MOVE </s> -0.3010
+-0.3010 NINE </s> -0.3010
+-0.3010 ONE </s> -0.3010
+-0.3010 PAPER </s> -0.3010
+-0.3010 RIGHT </s> -0.3010
+-0.3010 ROCK </s> -0.3010
+-0.6021 S ONE 0.0000
+-0.6021 S ZERO 0.0000
+-0.3010 SCISSORS </s> -0.3010
+-0.3010 SEVEN </s> -0.3010
+-0.3010 SIX </s> -0.3010
+-0.3010 START </s> -0.3010
+-0.3010 TEN </s> -0.3010
+-0.3010 THREE </s> -0.3010
+-0.3010 TWELVE </s> -0.3010
+-0.3010 TWO </s> -0.3010
+-0.3010 UP </s> -0.3010
+-0.7782 W ONE 0.0000
+-0.7782 W TWO 0.0000
+-0.7782 W ZERO 0.0000
+-0.3010 ZERO </s> -0.3010
+
+\3-grams:
+-0.3010 <s> CANCEL </s>
+-0.3010 <s> CONTINUE </s>
+-0.3010 <s> DECREASE </s>
+-0.3010 <s> DOWN </s>
+-0.6021 <s> E ONE
+-0.6021 <s> E ZERO
+-0.3010 <s> EIGHT </s>
+-0.3010 <s> ELEVEN </s>
+-0.3010 <s> FIVE </s>
+-0.3010 <s> FOUR </s>
+-0.3010 <s> INCREASE </s>
+-0.3010 <s> JOINT </s>
+-0.3010 <s> LEFT </s>
+-0.3010 <s> MOVE </s>
+-0.3010 <s> NINE </s>
+-0.3010 <s> ONE </s>
+-0.3010 <s> PAPER </s>
+-0.3010 <s> RIGHT </s>
+-0.3010 <s> ROCK </s>
+-0.6021 <s> S ONE
+-0.6021 <s> S ZERO
+-0.3010 <s> SCISSORS </s>
+-0.3010 <s> SEVEN </s>
+-0.3010 <s> SIX </s>
+-0.3010 <s> START </s>
+-0.3010 <s> TEN </s>
+-0.3010 <s> THREE </s>
+-0.3010 <s> TWELVE </s>
+-0.3010 <s> TWO </s>
+-0.3010 <s> UP </s>
+-0.7782 <s> W ONE
+-0.7782 <s> W TWO
+-0.7782 <s> W ZERO
+-0.3010 E ONE </s>
+-0.3010 E ZERO </s>
+-0.3010 S ONE </s>
+-0.3010 S ZERO </s>
+-0.3010 W ONE </s>
+-0.3010 W TWO </s>
+-0.3010 W ZERO </s>
+
+\end\

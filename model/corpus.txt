@@ -1,0 +1,33 @@
+rock
+paper
+scissors
+s zero
+s one
+e zero
+e one
+w zero
+w one
+w two
+joint
+increase
+decrease
+left
+right
+one
+two
+three
+four
+five
+six
+seven
+eight
+nine
+ten
+eleven
+twelve
+up
+down
+move
+cancel
+start
+continue
