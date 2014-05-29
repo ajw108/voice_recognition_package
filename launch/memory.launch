@@ -1,0 +1,9 @@
+<launch>
+
+  <include file="$(find voice_recognition)/launch/detector.launch"/>
+
+  <node name="memory" pkg="voice_recognition" type="memory.py" output="screen" respawn="true">
+  	<param name="speech" value="False"/>
+  	</node>
+ 
+</launch>

@@ -1,0 +1,9 @@
+<launch>
+
+  <node name="detector" pkg="voice_recognition" type="detector.py" output="screen"/>
+
+  <include file="$(find voice_recognition)/launch/pocketsphinx.launch"/>
+
+  <include file="$(find skeletontracker_nu)/launch/nu_skeletontracker.launch"/>
+ 
+</launch>

@@ -1,0 +1,8 @@
+<launch>
+
+  <node name="recognizer" pkg="pocketsphinx" type="recognizer.py">
+    <param name="lm" value="$(find voice_recognition)/model/RJ.lm"/>
+    <param name="dict" value="$(find voice_recognition)/model/RJ.dic"/>
+  </node>
+ 
+</launch>

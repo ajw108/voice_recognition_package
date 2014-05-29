@@ -1,0 +1,7 @@
+<launch>
+
+  <node name="voicetest" pkg="voice_recognition" type="voicetest.py" output="screen"/>
+
+  <include file="pocketsphinx.launch"/>
+ 
+</launch>
