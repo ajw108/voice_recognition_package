@@ -1,0 +1,59 @@
+<package>
+  <name>voice_recognition</name>
+  <version>0.0.1</version>
+  <description>
+    This package is developed for voice recognition for the RJ robot in 
+    Northwestern's NxR lab. To be used concurrently with Michael 
+    Ferguson's pocketsphinx package.
+  </description>
+  <author>Andrew Welter</author>
+  <maintainer email="andrew.j.welter@gmail.com">Andrew Welter</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rospy</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>roslib</build_depend>
+  <build_depend>actionlib</build_depend>
+
+  <build_depend>message_generation</build_depend>
+  <build_depend>trajectory_msgs</build_depend>
+  <build_depend>control_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_srvs</build_depend>
+  <build_depend>baxter_core_msgs</build_depend>
+  <build_depend>skeletonmsgs_nu</build_depend>
+
+  <build_depend>pocketsphinx</build_depend>
+  <build_depend>baxter_interface</build_depend>
+  <build_depend>nxr_baxter</build_depend>nxr_baxter
+  <build_depend>tf</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>dynamic_reconfigure</build_depend>
+
+  <run_depend>rospy</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>roslib</run_depend>
+  <run_depend>actionlib</run_depend>
+
+  <run_depend>message_runtime</run_depend>
+  <run_depend>trajectory_msgs</run_depend>
+  <run_depend>control_msgs</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>std_srvs</run_depend>
+  <run_depend>baxter_core_msgs</run_depend>
+  <run_depend>skeletonmsgs_nu</run_depend>
+
+  <run_depend>pocketsphinx</run_depend>
+  <run_depend>baxter_interface</run_depend>
+  <run_depend>nxr_baxter</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>dynamic_reconfigure</run_depend>
+  
+</package>
