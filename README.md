@@ -12,3 +12,4 @@ This brings up another potential improvement to the game and to the robot in gen
 
 Also in need of improvement is the means by which the motion tracker registers and holds the main user. This is currently being explored by others working on the same robot, so hopefully there will be a robust solution in place that can be adapted to this application.
 
+Finally, the last recommendation for immediate future work on this project is simply to thoroughly test it. For example, different users may not register the same way on the motion tracker, different accents may cause unintended results, or small bugs or unnaccounted-for edge cases may cause the game to fail. This may be best accomplished through taking statistics while part of a continuously-running display or by specifically monitoring a variety of users over multiple trials, but in either case this first revision likely has some issues that need to be resolved.
