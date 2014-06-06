@@ -71,3 +71,14 @@ Within the src directory are scripts for 5 ROS nodes. The comments within each s
 5. voicetest.py
 	
 	voicetest.py is the simplest example of controlling RJ with voice recognition; it simple uses voice commands to change the screen display. This is not required for the memory game.
+
+###Launch Files
+Within the launch directory are six xml files to be used with ROSlaunch to start the launch nodes described above. Their syntax is very simple.
+
+1. pocketsphinx.launch
+	
+	pocketsphinx.launch starts the pocketsphinx recognizer node for speech recognition. This file includes two parameters: the file location of RJ.lm, and RJ.dic. These files are required for the recognizer node to understand the list of words required for the memory game. The structure of these files will be explained in a later section.
+
+2. detector.launch
+ 	
+	detector.launch starts the detector node and includes the files pocketsphinx.launch and nu_skeletontracker.launch, which start the recognizer node and the skeletontracker_nu node, respectively.
