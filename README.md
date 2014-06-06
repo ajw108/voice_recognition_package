@@ -52,7 +52,7 @@ Within the src directory are scripts for 6 ROS nodes. The comments within each s
 	
 	All angles are determined with respect to horizontal formed by looking at the user from the robot's perspective. Thus, if the user's arms were straight horizontally (mimicking an axis), the user's left arm would represent the +x direction, the user's right arm would represent the -x direction, and +z and -z are standard up and down. The representation shown above means that the angles of the user's left upper arm and forearm are both within regions centered around 0 degrees, and the angles of the user's right upper arm and forearm are both within regions centered around 90 degrees. This would correspond to the user making an "L" shape with the right and left arms.
 	
-	All of the pose data, including the values of RJ's joint angles, the angular bounds for all poses, and the functions to compare angles and move between poses are all contained within the script poses.py. This script is non-executable and is imported into nodes to be able to call those functions. Poses.py also uses functions from the script vector_operations.py, which contains mathematical functions to determine angles from vectors.    
+	All of the pose data, including the values of RJ's joint angles and the angular bounds for the poses, as well as the functions to compare angles and move between poses are all contained within the script poses.py. This script is non-executable and is imported into nodes to be able to call those functions. Poses.py also uses functions from the script vector_operations.py, which contains mathematical functions to determine angles from vectors.    
 	
 	The speech recognition comparison is done in a single function, parseSpeech. It is simply comparing strings found from the speech recognition data to those found in words.py (a list of strings for the game), and returning any match between them. Further information on the speech recognition data can be found in the pocketsphinx documentation section.
 
@@ -61,6 +61,11 @@ Within the src directory are scripts for 6 ROS nodes. The comments within each s
 	memory.py is the executable that structures the game sequence described above, taking as input the output from the detector node. It uses images found in the img directory to handle the screen display, and functions from poses.py to move RJ to the required poses. Otherwise, it relies on the detector node to determine success or failure of the user's actions.
 
 3. voice_control.py
+ 	
+	voice_control.py is another node, but it is not required for the memory game. It is a simple example node for controlling RJ's various joints using voice commands.
+
 4. voice_pose.py
+ 	
+	voice_pose.py 
 5. voice_trajectory.py
 6. voicetest.py
