@@ -167,8 +167,6 @@ class Detector:
         but other cases may arise where this creates an error.
         """
 
-        speech = msg.data
-
         for i in self.words:
             if msg.data.find(i) > -1:
                 self.speech = i
