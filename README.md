@@ -39,20 +39,14 @@ The voice recognition directory contains 5 subdirectories: images, launch, model
 Within the src directory are scripts for 6 ROS nodes. The comments within each script give a more thorough overview of the purpose of each node and the specifics of each function.
 
 1. detector.py
-
-detector.py continuously reads the data from the skeleton tracker and the pocketsphinx recognizer. It analyzes the body position of the user or the list of spoken words and publishes any configurations that match those required by the memory game. Additionally, the detector node handles the tracking of the main user.
-
-The matching of skeleton data to a pose for the memory game is done by projecting the spatial positions of the user's shoulder, elbow, and hand into the x-z plane. From there, the angle of the vectors between the user's shoulder and elbow (upper arm) and between the elbow and hand (forearm) are calculated. These vector angles are then compared to a dictionary of poses that contain bounds on these angles; and if the angles lie within the bounds for a specific pose, that pose is successfully matched.  
-For example, one pose condition is:
-
+detector.py continuously reads the data from the skeleton tracker and the pocketsphinx recognizer. It analyzes the body position of the user or the list of spoken words and publishes any configurations that match those required by the memory game. Additionally, the detector node handles the tracking of the main user.    
+The matching of skeleton data to a pose for the memory game is done by projecting the spatial positions of the user's shoulder, elbow, and hand into the x-z plane. From there, the angle of the vectors between the user's shoulder and elbow (upper arm) and between the elbow and hand (forearm) are calculated. These vector angles are then compared to a dictionary of poses that contain bounds on these angles; and if the angles lie within the bounds for a specific pose, that pose is successfully matched.      
+For example, one pose condition is:    
 3 : {'left' : {'upper_arm' : [-22.5, 22.5], 'forearm' : [-22.5, 22.5]},
-		'right' : {'upper_arm' : [67.5, 112.5], 'forearm' : [67.5, 112.5]}},
-		
-All angles are determined with respect to horizontal formed by looking at the user from the robot's perspective. Thus, if the user's arms were straight horizontally (mimicking an axis), the user's left arm would represent the +x direction, the user's right arm would represent the -x direction, and +z and -z are standard up and down. The representation shown above means that the angles of the user's left upper arm and forearm are both within regions centered around 0 degrees, and the angles of the user's right upper arm and forearm are both within regions centered around 90 degrees. This would correspond to the user making an "L" shape with the right and left arms.
-
-All of the pose data, including the values of RJ's joint angles, the angular bounds for all poses, and the functions to compare angles and move between poses are all contained within the script poses.py. This script is non-executable and is imported into nodes to be able to call those functions. Poses.py also uses functions from the script vector_operations.py, which contains mathematical functions to determine angles from vectors.
-
-The speech recognition comparison is done in a single function, parseSpeech. It is simply comparing strings found from the speech recognition data to those found in words.py (a list of strings for the game), and returning any match between them. Further information on the speech recognition data can be found in the pocketsphinx documentation section.
+		'right' : {'upper_arm' : [67.5, 112.5], 'forearm' : [67.5, 112.5]}},    
+All angles are determined with respect to horizontal formed by looking at the user from the robot's perspective. Thus, if the user's arms were straight horizontally (mimicking an axis), the user's left arm would represent the +x direction, the user's right arm would represent the -x direction, and +z and -z are standard up and down. The representation shown above means that the angles of the user's left upper arm and forearm are both within regions centered around 0 degrees, and the angles of the user's right upper arm and forearm are both within regions centered around 90 degrees. This would correspond to the user making an "L" shape with the right and left arms.    
+All of the pose data, including the values of RJ's joint angles, the angular bounds for all poses, and the functions to compare angles and move between poses are all contained within the script poses.py. This script is non-executable and is imported into nodes to be able to call those functions. Poses.py also uses functions from the script vector_operations.py, which contains mathematical functions to determine angles from vectors.    
+The speech recognition comparison is done in a single function, parseSpeech. It is simply comparing strings found from the speech recognition data to those found in words.py (a list of strings for the game), and returning any match between them. Further information on the speech recognition data can be found in the pocketsphinx documentation section.    
 
 2. memory.py
 
