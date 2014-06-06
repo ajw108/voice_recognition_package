@@ -36,7 +36,7 @@ Finally, the last recommendation for immediate future work on this project is si
 ### File Structure
 The voice recognition directory contains 5 subdirectories: images, launch, model, msg, and src. Launch, msg, and src are ROS standard directories, images contains all of the image files for the memory game, and model contains the language model files for the pocketsphinx recognizer.
 ####Source Code
-Within the src directory are scripts for 6 ROS nodes. The comments within each script give a more thorough overview of the purpose of each node and the specifics of each function.
+Within the src directory are scripts for 5 ROS nodes. The comments within each script give a more thorough overview of the purpose of each node and the specifics of each function.
 
 1. 	detector.py
 	
@@ -66,6 +66,8 @@ Within the src directory are scripts for 6 ROS nodes. The comments within each s
 
 4. voice_pose.py
  	
-	voice_pose.py 
-5. voice_trajectory.py
-6. voicetest.py
+	voice_pose.py is another node that uses voice commands to switch between poses. It requires the trajectory controller (discussed later) to be running. This node is not required for the memory game and is also out of date with the latest version of poses.py.
+
+5. voicetest.py
+	
+	voicetest.py is the simplest example of controlling RJ with voice recognition; it simple uses voice commands to change the screen display. This is not required for the memory game.
