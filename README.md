@@ -81,4 +81,20 @@ Within the launch directory are six xml files to be used with ROSlaunch to start
 
 2. detector.launch
  	
-	detector.launch starts the detector node and includes the files pocketsphinx.launch and nu_skeletontracker.launch, which start the recognizer node and the skeletontracker_nu node, respectively.
+	detector.launch starts the detector node and includes the files pocketsphinx.launch and nu_skeletontracker.launch, which start the recognizer (speech recognition) node and the skeletontracker_nu (motion tracking) node, respectively.
+
+3. memory.launch
+	
+	memory.launch starts the memory node and includes the file detector.launch. There is a single parameter in memory.launch, which is a boolean parameter "speech". If speech is specified as true, then the memory game will be run with voice recognition and motion tracking. If false, only motion tracking.
+
+4. voice_control.launch
+	
+	Starts the voice_control node and includes pocketsphinx.launch
+
+5. voice_pose.launch
+	
+	Starts the voice_pose node and includes pocketsphinx.launch
+
+5. voicetest.launch
+	
+	Starts the voicetest node and includes pocketsphinx.launch
