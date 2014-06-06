@@ -77,7 +77,7 @@ Within the launch directory are six xml files to be used with ROSlaunch to start
 
 1. pocketsphinx.launch
 	
-	pocketsphinx.launch starts the pocketsphinx recognizer node for speech recognition. This file includes two parameters: the file location of RJ.lm, and RJ.dic. These files are required for the recognizer node to understand the list of words required for the memory game. The structure of these files will be explained in a later section.
+	pocketsphinx.launch starts the pocketsphinx recognizer node for speech recognition. This file includes two parameters: the file location of RJ.lm, and RJ.dic. These files are required for the recognizer node to understand the list of words required for the memory game. The structure of these files will be explained in a later section. This file can include an additional optional parameter to specify which microphone is needed, but if only one mic is in use the node will automatically determine the correct microphone.
 
 2. detector.launch
  	
@@ -119,3 +119,24 @@ The model directory contains three files that are used for the creation and impl
 1. corpus.txt
 	
 	corpus.txt is a simple text file with a specific syntax. Each line contains one word or phrase that the pocketsphinx software will recognize. More information on the specifics of the syntax can be found [here](http://www.speech.cs.cmu.edu/tools/lmtool.html)
+
+2. RJ.dic
+	
+	RJ.dic is a dictionary file produced by CMU's language model tools that contains all words listed in corpus.txt. Each word is broken down into its standard [phonemes](http://en.wikipedia.org/wiki/Phoneme).
+
+3. RJ.lm
+	
+	RJ.lm is a language model file produced by CMU's language model tools. It contains the probabilistic model that determines the likelihood that a given word in corpus.txt was spoken.
+
+###Starting the Game
+A small amount of setup is required to start the memory game. First, if speech recognition is to be used, the sound settings on the computer must be tested and adjusted if necessary. The microphone to be used should be tested in its final location as if the game were being played. Ubuntu has basic sound options that allow input to be tested. Ensure that the microphone is registering a signal that spans most of the range of input volumes when speaking at an acceptable volume.
+
+Next, the trajectory controller node must be started. Currently, this is not done through a .launch file and must be done independently of the memory game. The command is:
+
+	rosrun baxter_tools joint_trajectory_action joint_trajectory_action_server.py
+	
+After this, the file memory.launch will start everything else required. The game will begin immediately after entering:
+
+	roslaunch voice_recogntion memory.launch
+	
+If the memory node shuts down for any reason, the robot will safely move to the rest position before the node stops.
