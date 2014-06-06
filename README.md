@@ -112,3 +112,10 @@ The detector node publishes this message at a 20hz frequency, and the memory nod
 
 ####Images
 The images directory contains all images used for the nodes described above, as well as extraneous images used in earlier iterations of the project.
+
+####Language Model Files
+The model directory contains three files that are used for the creation and implementation of a language model that the pocketsphinx recognizer utilizes for speech recognition. The pocketsphinx software will be described in detail in a later section.
+
+1. corpus.txt
+	
+	corpus.txt is a simple text file with a specific syntax. Each line contains one word or phrase that the pocketsphinx software will recognize. More information on the specifics of the syntax can be found [here](http://www.speech.cs.cmu.edu/tools/lmtool.html)
