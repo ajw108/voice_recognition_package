@@ -105,9 +105,7 @@ class Detector:
             self.poseID = self.poses.angleCompare(self.angles)
 
             # if self.poseID:
-            #    self.poses.moveToPose(self.poseID) #pose testing, uses the detecor
-            ## node to swap between poses given by the user
-
+            #    # can call moveToPose here to test pose detection
     #######################
     # SUBSCRIBER CALLBACK #
     #######################
