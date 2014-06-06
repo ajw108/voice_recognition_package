@@ -186,7 +186,7 @@ class Memory:
                 break
 
         if self.elemFound:
-            self.faceChange('good') 
+            self.faceChange('good') # sequence complete
             rospy.sleep(1)
             if len(self.run) == self.hardLevel: # hard mode switch
                 self.faceChange('easy')
