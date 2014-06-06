@@ -1,6 +1,6 @@
 # NxR-Baxter Voice Recognition
 ## Project Overview
-The goal of this project was to provide an additional dimension of human-robot interaction to the Baxter (nicknamed RJ) robot (from Rethink Robotics) currently on display in the Technological Institute at Northwestern University. Previous projects have used a motion tracker to control the robot; this project used CMU's pocketsphinx speech recognition software as an additional means to communicate with the robot. The end result of this was a "memory"-style game that challenged the user to memorize and match various sequences of poses and words provided directly by the robot. This format created an interestingly difficult competition between robot and human; ultimately, this aspect is what accomplished the goal of new forms of interaction and emotion as facilitated by voice recognition.
+The goal of this project was to provide an additional dimension of human-robot interaction to the Baxter (nicknamed RJ) robot (from Rethink Robotics) currently on display in the Technological Institute at Northwestern University. Previous projects have used a motion tracker to control the robot; this project used pocketsphinx speech recognition software developed by researchers at Carnegie Mellon University (CMU) as an additional means to communicate with the robot. The end result of this was a "memory"-style game that challenged the user to memorize and match various sequences of poses and words provided directly by the robot. This format created an interestingly difficult competition between robot and human; ultimately, this aspect is what accomplished the goal of new forms of interaction and emotion as facilitated by voice recognition.
 ### Game Guide
 This section explains how to physically play the game once it is running. There are two separate modes: one with speech recognition and one without. The two modes play very similarly. In the game, RJ gives the user an action, then the user must repeat all previously given actions in order, ending with the most recent. Gameplay flows along this basic sequence:  
 
@@ -140,3 +140,9 @@ After this, the file memory.launch will start everything else required. The game
 	roslaunch voice_recogntion memory.launch
 	
 If the memory node shuts down for any reason, the robot will safely move to the rest position before the node stops.
+###Pocketsphinx Documentation
+Pocketsphinx is the speech recognition software developed at Carnegie Mellon University that can be used for robust speech-recogntion tasks. This project currently only utilizes it in a very limited form. Full documentation on the software and the theory behind it can be found [here](http://cmusphinx.sourceforge.net/wiki/).
+
+For this project, the language model and dictionary file are automatically produced by the [Sphinx Knowledge Base Tool](http://www.speech.cs.cmu.edu/tools/lmtool-new.html). Simply upload the corpus.txt file and download the resulting .lm and .dic files.
+
+This language model tool uses various open-source Sphinx tools that are all open-source and all available for download. These tools provide much more versatility and options that the web tool does not. It would be a good topic of research for future additions to RJ and the memory game.
