@@ -2,7 +2,11 @@
 ## Project Overview
 The goal of this project was to provide an additional dimension of human-robot interaction to the Baxter (nicknamed RJ) robot (from Rethink Robotics) currently on display in the Technological Institute at Northwestern University. Previous projects have used a motion tracker to control the robot; this project used pocketsphinx speech recognition software developed by researchers at Carnegie Mellon University (CMU) as an additional means to communicate with the robot. The end result of this was a "memory"-style game that challenged the user to memorize and match various sequences of poses and words provided directly by the robot. This format created an interestingly difficult competition between robot and human; ultimately, this aspect is what accomplished the goal of new forms of interaction and emotion as facilitated by voice recognition.
 
-For more information on Rethink Robotics and Baxter, see [their website.](http://www.rethinkrobotics.com/products/baxter/)
+For more information on Rethink Robotics and Baxter, check [this website.](http://www.rethinkrobotics.com/products/baxter/)
+
+For more information on the Northwestern NxR lab, see [this website.](http://nxr.northwestern.edu/)
+
+For more information on the CMU sphinx software, see [this website.](http://cmusphinx.sourceforge.net/)
 ### Game Guide
 #### Starting the Game
 A small amount of setup is required to start the memory game. First, if speech recognition is to be used, the sound settings on the computer must be tested and adjusted if necessary. The microphone to be used should be tested in its final location as if the game were being played. Ubuntu has basic sound options that allow input to be tested. Ensure that the microphone is registering a signal that spans most of the range of input volumes when speaking at an acceptable volume.
@@ -40,16 +44,14 @@ Currently, the game will run continuously until manually quit on the terminal. T
 ## Technical Documentation
 ### File Structure
 The voice recognition directory contains 5 subdirectories: images, launch, model, msg, and src. Launch, msg, and src are ROS standard directories, images contains all of the image files for the memory game, and model contains the language model files for the pocketsphinx recognizer.
-#### Source Code
+### Source Code
 Within the src directory are scripts for 5 ROS nodes. The comments within each script give a more thorough overview of the purpose of each node and the specifics of each function.
 
 1. 	detector.py
 	
 	detector.py continuously reads the data from the skeleton tracker and the pocketsphinx recognizer. It analyzes the 	body position of the user or the list of spoken words and publishes any configurations that match those required by 		the memory game. Additionally, the detector node handles the tracking of the main user.  
 	
-	The matching of skeleton data to a pose for the memory game is done by projecting the spatial positions of the 			user's shoulder, elbow, and hand into the x-z plane. From there, the angle of the vectors between the user's 	shoulder and elbow (upper arm) and between the elbow and hand (forearm) are calculated. These vector angles are then 		compared to a dictionary of poses that contain bounds on these angles; and if the angles lie within the bounds
-	
-	for a specific pose, that pose is successfully matched.      
+	The matching of skeleton data to a pose for the memory game is done by projecting the spatial positions of the user's shoulder, elbow, and hand into the x-z plane. From there, the angle of the vectors between the user's 	shoulder and elbow (upper arm) and between the elbow and hand (forearm) are calculated. These vector angles are then compared to a dictionary of poses that contain bounds on these angles; and if the angles lie within the bounds for a specific pose, that pose is successfully matched.      
 	
 	For example, one pose condition is:
 	
@@ -58,6 +60,18 @@ Within the src directory are scripts for 5 ROS nodes. The comments within each s
 	All angles are determined with respect to horizontal formed by looking at the user from the robot's perspective. Thus, if the user's arms were straight horizontally (mimicking an axis), the user's left arm would represent the +x direction, the user's right arm would represent the -x direction, and +z and -z are standard up and down. The representation shown above means that the angles of the user's left upper arm and forearm are both within regions centered around 0 degrees, and the angles of the user's right upper arm and forearm are both within regions centered around 90 degrees. This would correspond to the user making an "L" shape with the right and left arms.
 	
 	All of the pose data, including the values of RJ's joint angles and the angular bounds for the poses, as well as the functions to compare angles and move between poses are all contained within the script poses.py. This script is non-executable and is imported into nodes to be able to call those functions. Poses.py also uses functions from the script vector_operations.py, which contains mathematical functions to determine angles from vectors.    
+	
+	User tracking, as stated above, is done simply by choosing the first user seen by the skeleton tracker. The skeleton tracker software handles the movement of users, so the only parameter needed to keep track of the current user is an assigned UserID and the user's starting position. From there, before accepting any input, the detector node checks to make sure the input is coming from the current UserID and that this user is not too far away from the starting position, as specified by a tolerance. If the user is too far away or the current UserID cannot be found, the program resets all boolenas and restarts the user-choosing process.	
+	
+		p1_x = self.user_starting_position.x
+		p1_z = self.user_starting_position.z
+		p2_x = skel.torso.transform.translation.x
+		p2_z = skel.torso.transform.translation.z
+		
+		dx = p2_x - p1_x
+		dz = p2_z - p1_z
+		
+		if not (math.fabs(dx) > 0.25 and math.fabs(dz) > 0.25):
 	
 	The speech recognition comparison is done in a single function, parseSpeech. It is simply comparing strings found from the speech recognition data to those found in words.py (a list of strings for the game), and returning any match between them. Further information on the speech recognition data can be found in the pocketsphinx documentation section.
 
@@ -77,7 +91,7 @@ Within the src directory are scripts for 5 ROS nodes. The comments within each s
 	
 	voicetest.py is the simplest example of controlling RJ with voice recognition; it simple uses voice commands to change the screen display. This is not required for the memory game.
 
-#### Launch Files
+### Launch Files
 Within the launch directory are six xml files to be used with ROSlaunch to start the launch nodes described above. Their syntax is very simple.
 
 1. pocketsphinx.launch
@@ -104,7 +118,7 @@ Within the launch directory are six xml files to be used with ROSlaunch to start
 	
 	Starts the voicetest node and includes pocketsphinx.launch
 
-#### ROS Messages
+### ROS Messages
 The msg directory contains a single 3-line file memory.msg that holds the custom message used for the memory game.
 
 	int32 poseID  
@@ -115,10 +129,10 @@ poseID is the integer number of the current pose matched by the user. The value 
 
 The detector node publishes this message at a 20hz frequency, and the memory node subscribes to it.
 
-#### Images
+### Images
 The images directory contains all images used for the nodes described above, as well as extraneous images used in earlier iterations of the project.
 
-#### Language Model Files
+### Language Model Files
 The model directory contains three files that are used for the creation and implementation of a language model that the pocketsphinx recognizer utilizes for speech recognition. The pocketsphinx software will be described in detail in a later section.
 
 1. corpus.txt
