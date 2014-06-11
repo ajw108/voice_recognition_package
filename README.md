@@ -1,8 +1,23 @@
 # NxR-Baxter Voice Recognition
 ## Project Overview
 The goal of this project was to provide an additional dimension of human-robot interaction to the Baxter (nicknamed RJ) robot (from Rethink Robotics) currently on display in the Technological Institute at Northwestern University. Previous projects have used a motion tracker to control the robot; this project used pocketsphinx speech recognition software developed by researchers at Carnegie Mellon University (CMU) as an additional means to communicate with the robot. The end result of this was a "memory"-style game that challenged the user to memorize and match various sequences of poses and words provided directly by the robot. This format created an interestingly difficult competition between robot and human; ultimately, this aspect is what accomplished the goal of new forms of interaction and emotion as facilitated by voice recognition.
+
+For more information on Rethink Robotics and Baxter, see [their website.](http://www.rethinkrobotics.com/products/baxter/)
 ### Game Guide
-This section explains how to physically play the game once it is running. There are two separate modes: one with speech recognition and one without. The two modes play very similarly. In the game, RJ gives the user an action, then the user must repeat all previously given actions in order, ending with the most recent. Gameplay flows along this basic sequence:  
+#### Starting the Game
+A small amount of setup is required to start the memory game. First, if speech recognition is to be used, the sound settings on the computer must be tested and adjusted if necessary. The microphone to be used should be tested in its final location as if the game were being played. Ubuntu has basic sound options that allow input to be tested. Ensure that the microphone is registering a signal that spans most of the range of input volumes when speaking at an acceptable volume.
+
+Next, the trajectory controller node must be started. Currently, this is not done through a .launch file and must be done independently of the memory game. The command is:
+
+	rosrun baxter_tools joint_trajectory_action joint_trajectory_action_server.py
+	
+After this, the file memory.launch will start everything else required. The game will begin immediately after entering:
+
+	roslaunch voice_recogntion memory.launch
+	
+If the memory node shuts down for any reason, the robot will safely move to the rest position before the node stops.
+#### Playing the Game
+There are two separate modes of the game: one with speech recognition and one without. The two modes play very similarly. In the game, RJ gives the user an action, then the user must repeat all previously given actions in order, ending with the most recent. Gameplay flows along this basic sequence:  
 
 1. Element addition  
 2. User element test  
@@ -19,23 +34,13 @@ The RJ reset is the short transition phase after the user tests the new element.
 The user sequence will be initialized by RJ with the messages "Ready..." and "Start!". Once this happens, the user will then be required to repeat each element in order. The number of each element will be displayed on the screen at this time, and a successful match will result in a green checkmark displayed. The sequence ends when all previous elements have been successfully performed by the user or when the user fails to recreate the element before the timer runs out (timer is a few seconds).
 
 Once the user sequence ends, RJ will evaluate the entire sequence and display a message accordingly. There are three separate cases that can occur. If the user succeeds in replicating the sequence, RJ will display "Good!", and the game will return to the element addition step. If the user fails at any point in the sequence, the sequence will terminate, a red 'X' will be displayed, and then the "Game Over" screen will show. The game then clears the sequence and resets itself, then returns to the element addition step. The final scenario is a special case that can only occur when speech recognition is enabled and after the sequence reaches a certain specified length. In this case, the game will switch to a harder difficulty, and instead of each element being either a pose or a word, the elements will be a pose, a word, or both a pose and a word. A short message will indicate that this switch has been made, and then the game will return to the element addition step.
-### Lessons Learned
-The main difficulties of this project were found in the game design itself and meeting the constraints caused by the speech recognition, motion tracking, and the robot. Both the speech recognition and motion tracking peripherals run at fast enough rates to encourage real-time interaction between the robot and user, but RJ moves at a relatively slow pace, which does not allow for quick, reflexive movements. For an interactive game, this speed constraint poses somewhat of a problem. Additionally, both the motion tracking and voice recognition needed to be implemented in a way that showcases their capabilities and without making either feel like a trivial add-on. The iniital thought was to create a rock-paper-scissors game, where the user and the robot play against each other and the robot provides both feedback and the game interface. However, rock-paper-scissors is not much fun to play unless the game can be played quickly, and this makes it non-ideal for RJ. Additionally, the game could be completed entirely with voice recognition or motion tracking, which meant that one would likely end up being trivialized. Add on top of this the fact that RJ cannot physically perform the standard rock-paper-scissors symbols, and it is clear why this initial idea was dismissed.
-  
-The memory game, however, succeeds where rock-paper-scissors did not due to a different effect of adding both peripherals. This game could certainly (and was, in fact) completed solely with voice recognition or solely with motion tracking, but the blend of the two adds a new level of difficulty instead of overlapping to accomplish the same task. The game also inherently requires relatively long periods of motion inactivity for the robot, which is desirable, but it is during these periods that the user is performing all of their actions and the other peripherals are providing real-time feedback. This means that the game meets all performance constraints without feeling like any aspects are too limited.
-### Next Steps
-In its current state, the project cannot be fully realized due to the available hardware. Specifically, an adequate microphone setup is required to implement the voice recognition portion of the game. There are significant challenges associated with this, though. RJ is located in a public space that has regular traffic, although it is usually light foot traffic of people passing through and not heavy crowds. Due to possible echoing and other noises, it is possible that the accuracy of the speech recognition would drop significantly as compared to the current setup, which uses a headset microphone. However, the game currently is simple enough that this may not be an issue, as the only speech inputs are the numbers one through ten.
-  
-This brings up another potential improvement to the game and to the robot in general, which is more complex voice recognition. The pocketsphinx software has capabilities far beyond just single-word recognition, which could certainly create a much more impressive and interactive display. Even the simpler recognition could be more interesting than the numbers one through ten; for example, it would be possible to pull random relevant words or short phrases from the internet and use them to play the game. In general, the game could have much more depth than it currently does, with a greater variety of actions and words offered to the user.
-
-Also in need of improvement is the means by which the motion tracker registers and holds the main user. This is currently being explored by others working on the same robot, so hopefully there will be a robust solution in place that can be adapted to this application.
-
-Finally, the last recommendation for immediate future work on this project is simply to thoroughly test it. For example, different users may not register the same way on the motion tracker, different accents may cause unintended results from speech recognition, or small bugs or unnaccounted-for edge cases may cause the game to fail. This may be best accomplished through taking statistics while part of a continuously-running display or by specifically monitoring a variety of users over multiple trials, but in either case this first revision likely has some issues that need to be resolved.
+#### Quitting the Game
+Currently, the game will run continuously until manually quit on the terminal. There is no way for a user to end the entire process. However, if the user simply walks away, the game sequence will stop and the system will wait for input from the next user to walk by. The current user detection system is not very robust; the game will choose the first person it sees as the user. If this user does not give the game any input, no other user will be able to play until the first user leaves. This, along with the user quitting procedure, needs to be updated for integration with a full display.
 
 ## Technical Documentation
 ### File Structure
 The voice recognition directory contains 5 subdirectories: images, launch, model, msg, and src. Launch, msg, and src are ROS standard directories, images contains all of the image files for the memory game, and model contains the language model files for the pocketsphinx recognizer.
-####Source Code
+#### Source Code
 Within the src directory are scripts for 5 ROS nodes. The comments within each script give a more thorough overview of the purpose of each node and the specifics of each function.
 
 1. 	detector.py
@@ -72,7 +77,7 @@ Within the src directory are scripts for 5 ROS nodes. The comments within each s
 	
 	voicetest.py is the simplest example of controlling RJ with voice recognition; it simple uses voice commands to change the screen display. This is not required for the memory game.
 
-####Launch Files
+#### Launch Files
 Within the launch directory are six xml files to be used with ROSlaunch to start the launch nodes described above. Their syntax is very simple.
 
 1. pocketsphinx.launch
@@ -99,7 +104,7 @@ Within the launch directory are six xml files to be used with ROSlaunch to start
 	
 	Starts the voicetest node and includes pocketsphinx.launch
 
-####ROS Messages
+#### ROS Messages
 The msg directory contains a single 3-line file memory.msg that holds the custom message used for the memory game.
 
 	int32 poseID  
@@ -110,10 +115,10 @@ poseID is the integer number of the current pose matched by the user. The value 
 
 The detector node publishes this message at a 20hz frequency, and the memory node subscribes to it.
 
-####Images
+#### Images
 The images directory contains all images used for the nodes described above, as well as extraneous images used in earlier iterations of the project.
 
-####Language Model Files
+#### Language Model Files
 The model directory contains three files that are used for the creation and implementation of a language model that the pocketsphinx recognizer utilizes for speech recognition. The pocketsphinx software will be described in detail in a later section.
 
 1. corpus.txt
@@ -128,21 +133,22 @@ The model directory contains three files that are used for the creation and impl
 	
 	RJ.lm is a language model file produced by CMU's language model tools. It contains the probabilistic model that determines the likelihood that a given word in corpus.txt was spoken.
 
-###Starting the Game
-A small amount of setup is required to start the memory game. First, if speech recognition is to be used, the sound settings on the computer must be tested and adjusted if necessary. The microphone to be used should be tested in its final location as if the game were being played. Ubuntu has basic sound options that allow input to be tested. Ensure that the microphone is registering a signal that spans most of the range of input volumes when speaking at an acceptable volume.
-
-Next, the trajectory controller node must be started. Currently, this is not done through a .launch file and must be done independently of the memory game. The command is:
-
-	rosrun baxter_tools joint_trajectory_action joint_trajectory_action_server.py
-	
-After this, the file memory.launch will start everything else required. The game will begin immediately after entering:
-
-	roslaunch voice_recogntion memory.launch
-	
-If the memory node shuts down for any reason, the robot will safely move to the rest position before the node stops.
-###Pocketsphinx Documentation
+### Pocketsphinx Documentation
 Pocketsphinx is the speech recognition software developed at Carnegie Mellon University that can be used for robust speech-recogntion tasks. This project currently only utilizes it in a very limited form. Full documentation on the software and the theory behind it can be found [here](http://cmusphinx.sourceforge.net/wiki/).
 
 For this project, the language model and dictionary file are automatically produced by the [Sphinx Knowledge Base Tool](http://www.speech.cs.cmu.edu/tools/lmtool-new.html). Simply upload the corpus.txt file and download the resulting .lm and .dic files.
 
 This language model tool uses various open-source Sphinx tools that are all open-source and all available for download. These tools provide much more versatility and options that the web tool does not. It would be a good topic of research for future additions to RJ and the memory game.
+## Project Takeaways
+### Lessons Learned
+The main difficulties of this project were found in the game design itself and meeting the constraints caused by the speech recognition, motion tracking, and the robot. Both the speech recognition and motion tracking peripherals run at fast enough rates to encourage real-time interaction between the robot and user, but RJ moves at a relatively slow pace, which does not allow for quick, reflexive movements. For an interactive game, this speed constraint poses somewhat of a problem. Additionally, both the motion tracking and voice recognition needed to be implemented in a way that showcases their capabilities and without making either feel like a trivial add-on. The iniital thought was to create a rock-paper-scissors game, where the user and the robot play against each other and the robot provides both feedback and the game interface. However, rock-paper-scissors is not much fun to play unless the game can be played quickly, and this makes it non-ideal for RJ. Additionally, the game could be completed entirely with voice recognition or motion tracking, which meant that one would likely end up being trivialized. Add on top of this the fact that RJ cannot physically perform the standard rock-paper-scissors symbols, and it is clear why this initial idea was dismissed.
+  
+The memory game, however, succeeds where rock-paper-scissors did not due to a different effect of adding both peripherals. This game could certainly (and was, in fact) completed solely with voice recognition or solely with motion tracking, but the blend of the two adds a new level of difficulty instead of overlapping to accomplish the same task. The game also inherently requires relatively long periods of motion inactivity for the robot, which is desirable, but it is during these periods that the user is performing all of their actions and the other peripherals are providing real-time feedback. This means that the game meets all performance constraints without feeling like any aspects are too limited.
+### Next Steps
+In its current state, the project cannot be fully realized due to the available hardware. Specifically, an adequate microphone setup is required to implement the voice recognition portion of the game. There are significant challenges associated with this, though. RJ is located in a public space that has regular traffic, although it is usually light foot traffic of people passing through and not heavy crowds. Due to possible echoing and other noises, it is possible that the accuracy of the speech recognition would drop significantly as compared to the current setup, which uses a headset microphone. However, the game currently is simple enough that this may not be an issue, as the only speech inputs are the numbers one through ten.
+  
+This brings up another potential improvement to the game and to the robot in general, which is more complex voice recognition. The pocketsphinx software has capabilities far beyond just single-word recognition, which could certainly create a much more impressive and interactive display. Even the simpler recognition could be more interesting than the numbers one through ten; for example, it would be possible to pull random relevant words or short phrases from the internet and use them to play the game. In general, the game could have much more depth than it currently does, with a greater variety of actions and words offered to the user.
+
+Also in need of improvement is the means by which the motion tracker registers and holds the main user. This is currently being explored by others working on the same robot, so hopefully there will be a robust solution in place that can be adapted to this application.
+
+Finally, the last recommendation for immediate future work on this project is simply to thoroughly test it. For example, different users may not register the same way on the motion tracker, different accents may cause unintended results from speech recognition, or small bugs or unnaccounted-for edge cases may cause the game to fail. This may be best accomplished through taking statistics while part of a continuously-running display or by specifically monitoring a variety of users over multiple trials, but in either case this first revision likely has some issues that need to be resolved.
