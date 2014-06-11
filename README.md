@@ -49,7 +49,7 @@ Within the src directory are scripts for 5 ROS nodes. The comments within each s
 
 1. 	detector.py
 	
-	detector.py continuously reads the data from the skeleton tracker and the pocketsphinx recognizer. It analyzes the 	body position of the user or the list of spoken words and publishes any configurations that match those required by 		the memory game. Additionally, the detector node handles the tracking of the main user.  
+	detector.py continuously reads the data from the skeleton tracker and the pocketsphinx recognizer. It analyzes the body position of the user or the list of spoken words and publishes any configurations that match those required by the memory game. Additionally, the detector node handles the tracking of the main user.  
 	
 	The matching of skeleton data to a pose for the memory game is done by projecting the spatial positions of the user's shoulder, elbow, and hand into the x-z plane. From there, the angle of the vectors between the user's 	shoulder and elbow (upper arm) and between the elbow and hand (forearm) are calculated. These vector angles are then compared to a dictionary of poses that contain bounds on these angles; and if the angles lie within the bounds for a specific pose, that pose is successfully matched.      
 	
@@ -59,7 +59,14 @@ Within the src directory are scripts for 5 ROS nodes. The comments within each s
 	
 	All angles are determined with respect to horizontal formed by looking at the user from the robot's perspective. Thus, if the user's arms were straight horizontally (mimicking an axis), the user's left arm would represent the +x direction, the user's right arm would represent the -x direction, and +z and -z are standard up and down. The representation shown above means that the angles of the user's left upper arm and forearm are both within regions centered around 0 degrees, and the angles of the user's right upper arm and forearm are both within regions centered around 90 degrees. This would correspond to the user making an "L" shape with the right and left arms.
 	
-	All of the pose data, including the values of RJ's joint angles and the angular bounds for the poses, as well as the functions to compare angles and move between poses are all contained within the script poses.py. This script is non-executable and is imported into nodes to be able to call those functions. Poses.py also uses functions from the script vector_operations.py, which contains mathematical functions to determine angles from vectors.    
+	All of the pose data, including the values of RJ's joint angles and the angular bounds for the poses, as well as the functions to compare angles and move between poses are all contained within the script poses.py. This script is non-executable and is imported into nodes to be able to call those functions. Poses.py also uses functions from the script vector_operations.py, which contains mathematical functions to determine angles from vectors.
+	
+	Motion between poses is currently done using the trajectory controller, which designs a trajectory for RJ by taking as input a series of points in RJ's joint-space as well as a time value in which to complete the trajectory. Poses.py contains a dictionary that has these joint-space values. For example: 
+	
+		1 : {'left' : [.8, -.8, -3, 0, 0, 0, 0], #Y
+		'right' : [-.8, -.8, 3, 0, 0, 0, 0]},
+	
+	This structure represents RJ's left arm and right arm. These values were determined by physically moving RJ to the desired configuration and checking the various angles using software. This was necessary due to the need to avoid obstacles within the cell that contains RJ. This also makes trajectory generation more complex, as having straight arms will very likely hit the walls when moving between poses, and having bent arms makes the poses very ambiguous. This is done by including an additional parameter "bend" passed to the moveToPose function. If "bend" is true, the arms will move to a safe bent state before moving to another pose. This should always be used. In fact, the parameter is probably unnecessary and the program can be simplified to exclude it and always move to the bent state first. Also of note is the fact that each of these bent states is "hardcoded" based off of the particular pose. There is likely a much more robust way of handling this motion.
 	
 	User tracking, as stated above, is done simply by choosing the first user seen by the skeleton tracker. The skeleton tracker software handles the movement of users, so the only parameter needed to keep track of the current user is an assigned UserID and the user's starting position. From there, before accepting any input, the detector node checks to make sure the input is coming from the current UserID and that this user is not too far away from the starting position, as specified by a tolerance. If the user is too far away or the current UserID cannot be found, the program resets all boolenas and restarts the user-choosing process.	
 	
@@ -73,15 +80,17 @@ Within the src directory are scripts for 5 ROS nodes. The comments within each s
 		
 		if not (math.fabs(dx) > 0.25 and math.fabs(dz) > 0.25):
 	
+	The above code handles the user checking. The values dx and dz represent the change in the user's x- and z- position as seen by the skeleton tracker. The y-direction would represent moving closer to the tracker. For a new user to be chosen, the user's position would need to change in both the x- and z- direction by more than the tolerance of 0.25.
+	
 	The speech recognition comparison is done in a single function, parseSpeech. It is simply comparing strings found from the speech recognition data to those found in words.py (a list of strings for the game), and returning any match between them. Further information on the speech recognition data can be found in the pocketsphinx documentation section.
 
 2. memory.py
 	
-	memory.py is the executable that structures the game sequence described above, taking as input the output from the detector node. It uses images found in the img directory to handle the screen display, and functions from poses.py to move RJ to the required poses. Otherwise, it relies on the detector node to determine success or failure of the user's actions.
+	memory.py is the executable that structures the game sequence described above, taking as input the output from the detector node. It uses images found in the img directory to handle the screen display, and functions from poses.py to move RJ to the required poses. Otherwise, it relies on the detector node to determine success or failure of the user's actions. All of the main functions of this node are explained in other sections. See the source code for more details.
 
 3. voice_control.py
  	
-	voice_control.py is another node, but it is not required for the memory game. It is a simple example node for controlling RJ's various joints using voice commands.
+	voice_control.py is another node that uses speech recognition, but it is not required for the memory game. It is a simple example node for controlling RJ's various joints using voice commands.
 
 4. voice_pose.py
  	
@@ -104,7 +113,7 @@ Within the launch directory are six xml files to be used with ROSlaunch to start
 
 3. memory.launch
 	
-	memory.launch starts the memory node and includes the file detector.launch. There is a single parameter in memory.launch, which is a boolean parameter "speech". If speech is specified as true, then the memory game will be run with voice recognition and motion tracking. If false, only motion tracking.
+	memory.launch starts the memory node and includes the file detector.launch. There is a single parameter in memory.launch, which is a boolean parameter "speech". If speech is specified as true, then the memory game will be run with voice recognition and motion tracking. If false, only motion tracking. Additionally, the general ROS parameter "respawn" was set to true, so the node will restart itself if it crashes for any reason.
 
 4. voice_control.launch
 	
@@ -154,10 +163,12 @@ For this project, the language model and dictionary file are automatically produ
 
 This language model tool uses various open-source Sphinx tools that are all open-source and all available for download. These tools provide much more versatility and options that the web tool does not. It would be a good topic of research for future additions to RJ and the memory game.
 ## Project Takeaways
-### Lessons Learned
+### Difficulties
 The main difficulties of this project were found in the game design itself and meeting the constraints caused by the speech recognition, motion tracking, and the robot. Both the speech recognition and motion tracking peripherals run at fast enough rates to encourage real-time interaction between the robot and user, but RJ moves at a relatively slow pace, which does not allow for quick, reflexive movements. For an interactive game, this speed constraint poses somewhat of a problem. Additionally, both the motion tracking and voice recognition needed to be implemented in a way that showcases their capabilities and without making either feel like a trivial add-on. The iniital thought was to create a rock-paper-scissors game, where the user and the robot play against each other and the robot provides both feedback and the game interface. However, rock-paper-scissors is not much fun to play unless the game can be played quickly, and this makes it non-ideal for RJ. Additionally, the game could be completed entirely with voice recognition or motion tracking, which meant that one would likely end up being trivialized. Add on top of this the fact that RJ cannot physically perform the standard rock-paper-scissors symbols, and it is clear why this initial idea was dismissed.
   
 The memory game, however, succeeds where rock-paper-scissors did not due to a different effect of adding both peripherals. This game could certainly (and was, in fact) completed solely with voice recognition or solely with motion tracking, but the blend of the two adds a new level of difficulty instead of overlapping to accomplish the same task. The game also inherently requires relatively long periods of motion inactivity for the robot, which is desirable, but it is during these periods that the user is performing all of their actions and the other peripherals are providing real-time feedback. This means that the game meets all performance constraints without feeling like any aspects are too limited.
+
+From a technical perspective, the main difficulty was finding a good way of moving between poses. Rethink Robotics includes a few different basic tools to move the arms. The position controller worked, but it was much too slow for any type of entertaining game. The trajectory controller fixed this speed problem, but it actually required some slight modification to work. There is a single line commented out in the joint_trajectory_action_server.py code that needed to be uncommented and the next line commented instead. This line handles the stopping conditions of the trajectory controller. Originally it set joint velocities to zero instead of holding constant position (which the line swap accomplished), and this for some reason disabled the robot and caused the arms to drop. I believe this was a bug, but if not found then the motion problem would have been much more difficult. However, both the trajectory controller and the position controller do not have any means of avoiding obstacles, which resulted in the workarounds described above.
 ### Next Steps
 In its current state, the project cannot be fully realized due to the available hardware. Specifically, an adequate microphone setup is required to implement the voice recognition portion of the game. There are significant challenges associated with this, though. RJ is located in a public space that has regular traffic, although it is usually light foot traffic of people passing through and not heavy crowds. Due to possible echoing and other noises, it is possible that the accuracy of the speech recognition would drop significantly as compared to the current setup, which uses a headset microphone. However, the game currently is simple enough that this may not be an issue, as the only speech inputs are the numbers one through ten.
   
